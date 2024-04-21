@@ -5,10 +5,10 @@ public:
         int m = grid[0].size();
         vis[x][y] = 1;
         vector<int> maxi = {max(x,maxx),max(y,maxy)};
-        int dx[4] = {1,-1,0,0};
-        int dy[4] = {0,0,-1,1};
+        int dx[2] = {1,0};
+        int dy[2] = {0,1};
         
-        for(int i = 0; i < 4; i++){
+        for(int i = 0; i < 2; i++){
             int newx = x + dx[i];
             int newy = y + dy[i];
             if(newx >= 0 && newy >= 0 && newx < n && newy < m && grid[newx][newy] && !vis[newx][newy]){
