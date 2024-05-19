@@ -52,6 +52,17 @@ public:
 
         // return max(sol + temp - minIncrease,sol + temp - minDecrease);
         vector<vector<ll>> dp(n,vector<ll> (2,-1));
-        return solve(0,nums,0,k,dp);
+        // return solve(0,nums,0,k,dp);
+        dp[0][0] = nums[0];
+        dp[0][1] = (nums[0]^k);
+
+        for(int i = 1; i < n; i++){
+            dp[i][1] = max(dp[i - 1][0] + (nums[i]^k),dp[i - 1][1] + nums[i]);
+            dp[i][0] = max(dp[i - 1][1] + (nums[i]^k),dp[i - 1][0] + nums[i]);
+        }
+
+
+        return dp[n - 1][0];
+
     }
 };
