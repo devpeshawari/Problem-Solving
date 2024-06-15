@@ -33,14 +33,34 @@ public:
     
     int coinChange(vector<int>& coins, int amount) {
         int n = coins.size();
-        vector<vector<int>> dp(n, vector<int> (amount + 1,-1));
+        vector<vector<ll>> dp(n, vector<ll> (amount + 1,INT_MAX));
 
-        int sol =  solve(n - 1,amount,coins,dp);
-        if(sol == INT_MAX){
+        // int sol =  solve(n - 1,amount,coins,dp);
+        // if(sol == INT_MAX){
+        //     return -1;
+        // }
+        // return sol;
+        for(int i = 0; i <= amount; i++){
+            if(i%coins[0] == 0){
+                dp[0][i] = i/coins[0]; 
+            }
+        }
+
+        for(int i = 1; i < n; i++){
+            for(int j = 0; j <= amount; j++){
+                ll take = INT_MAX;
+                ll notTake = dp[i - 1][j];
+                if(j >= coins[i]){
+                    take = 1 + dp[i][j - coins[i]];
+                }
+                dp[i][j] = min(take,notTake);
+            }
+        }
+        if(dp[n - 1][amount] == INT_MAX){
             return -1;
         }
-        return sol;
 
+        return dp[n - 1][amount];
 
 
     }
