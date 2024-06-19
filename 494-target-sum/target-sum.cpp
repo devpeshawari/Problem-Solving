@@ -1,55 +1,55 @@
 class Solution {
 public:
-    int solve(int i, int target, vector<int> & nums,vector<vector<int>> &dpPos, vector<vector<int>> &dpNeg){
-        if(target >= 0){
-            if(dpPos[i][target] != -1){
-                return dpPos[i][target];
+    int solve(int i, int sum, int target, int total, vector<int> &nums, vector<vector<int>> &dp){
+        if(sum >= 0){
+            if(dp[i][sum] != -1){
+                return dp[i][sum];
             }
         }
         else{
-            if(dpNeg[i][-target] != -1){
-                return dpNeg[i][-target];
-            }
+             if(dp[i][total + abs(sum)] != -1){
+                return dp[i][total + abs(sum)];
+             }
         }
         if(i == 0){
-            if((target - nums[i] == 0)  && (target + nums[i] == 0)){
+            if(sum - nums[0] == target && sum + nums[0] == target){
                 return 2;
             }
-            if((target - nums[i] == 0)  || (target + nums[i] == 0)){
+            else if(sum - nums[0] == target || sum + nums[0] == target){
                 return 1;
             }
             else{
                 return 0;
             }
         }
-        int pos = solve(i - 1,target - nums[i], nums, dpPos, dpNeg);
-        int neg = solve(i - 1,target + nums[i], nums, dpPos, dpNeg);
-        if(target >= 0){
-            return dpPos[i][target] = pos + neg;
+
+        int plus = solve(i - 1, sum + nums[i], target, total, nums, dp);
+        int minus = solve(i - 1, sum - nums[i], target, total, nums, dp);
+
+        if(sum >= 0){
+            dp[i][sum] = plus + minus;
         }
         else{
-            return dpNeg[i][-target] = pos + neg;
+            dp[i][total + abs(sum)] = plus + minus;
         }
-        
+        return plus + minus;
+
     }
     
     
     int findTargetSumWays(vector<int>& nums, int target) {
         int n = nums.size();
-        int sum = 0;
         int total = 0;
-        for(int i = 0; i < n; i++){
-            sum+=nums[i];
-        }
-        vector<vector<int>> dpPos;
-        vector<vector<int>> dpNeg;
-        if(target + sum >= 0){
-            dpPos.resize(n,vector<int>(target + sum + 1,-1));      
-        }
-        if(target - sum < 0){
-            dpNeg.resize(n,vector<int>(abs(target - sum - 1),-1));      
-        }
         
-        return solve(n - 1, target, nums, dpPos, dpNeg);
+        for(int i = 0; i < n; i++){
+            total+= nums[i];
+        }
+
+        vector<vector<int>> dp(n,vector<int>((total * 2) + 2, -1));
+
+        
+
+
+        return solve(n - 1,0, target, total, nums, dp);
     }
 };
