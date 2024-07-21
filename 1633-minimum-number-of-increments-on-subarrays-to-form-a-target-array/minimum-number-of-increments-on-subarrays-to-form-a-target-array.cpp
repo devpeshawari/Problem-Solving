@@ -1,21 +1,47 @@
+#define ll long long
 class Solution {
 public:
     int minNumberOperations(vector<int>& target) {
         int n = target.size();
-        int sol = target[0];
-        int last = target[0];
+        ll sol = abs(target[0]);
+        ll last = target[0];
         for(int i = 1; i < n; i++){
-            if(last > target[i]){
+            if(target[i] == 0){
+                last = 0;
+                continue;
+            }
+            if(last == 0){
+                sol+=abs(target[i]);
                 last = target[i];
+            }
+            else if(last > 0){
+                if(target[i] > 0){
+                    if(target[i] >= last){
+                        sol+=target[i] - last;
+                    }
+                    last = target[i];
+                }
+                else{
+                    last = target[i];
+                    sol+=abs(target[i]);    
+                }
             }
             else{
-                sol+=target[i] - last;
-                last = target[i];
+                if(target[i] < 0){
+                    last = target[i];
+                    if(target[i] <= last){
+                        sol+=abs(target[i] - last);
+                    }
+                }
+                else{
+                    last = target[i];
+                    sol+=abs(target[i]);    
+                }
             }
-        }   
+            
+        }
 
         return sol;
-
 
 
         
