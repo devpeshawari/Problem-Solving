@@ -1,24 +1,26 @@
 class Solution {
 public:
-
     int lengthOfLongestSubstring(string s) {
-        int n = s.size(); //the size of our string
-        int j = 0;//which is the left pointer
+        //sol = 3
+        //temp = 0
+        //i = 1
+        //j = 1 
+        //[]
+        
         int sol = 0;
-        unordered_set<char> mp;
+        int n = s.size();
         for(int i = 0; i < n; i++){
-            if(mp.find(s[i]) != mp.end()){ //checking if the current element is in the map
-                while(j < n && s[j] != s[i] ){
-                    mp.erase(s[j]);
-                    j++;
+            unordered_set<char> mp;
+            for(int j = i; j < n; j++){
+                if(mp.find(s[j]) != mp.end()){
+                    break;
                 }
-                j++;
+                sol = max(sol, j - i + 1);
+                mp.insert(s[j]);
             }
-            cout << j << " ";
-            sol = max(i - j + 1, sol);
-            mp.insert(s[i]);
         }
 
         return sol;
+
     }
 };
