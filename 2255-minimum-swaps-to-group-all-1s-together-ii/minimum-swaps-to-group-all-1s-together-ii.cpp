@@ -19,7 +19,7 @@ public:
             cnt+= nums[i%n];
             if(i >= k){
                 cnt-=nums[j];
-                j = (j + 1)%n;
+                j = (j + 1);
             }
             maxNum = max(cnt,maxNum);
         }   
