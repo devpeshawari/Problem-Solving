@@ -9,7 +9,7 @@ public:
         for(int i = 0; i < n; i++){
             mp[nums[i]]++;
             
-            while(j < n && mp.size() > k){
+            while(mp.size() > k){
                mp[nums[j]]--;
                if(mp[nums[j]] == 0){
                     mp.erase(nums[j]);
@@ -27,7 +27,7 @@ public:
     }
     
     int subarraysWithKDistinct(vector<int>& nums, int k) {
-       
+        
         return solve(nums,k) - solve(nums,k - 1);
     }
 };
