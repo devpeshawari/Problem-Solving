@@ -1,43 +1,44 @@
 class Solution {
 public:
-    bool dfs(int start, vector<vector<int>> &adjList, vector<int> &vis, vector<int> &totalVis){
-        vis[start] = 1;
-        totalVis[start] = 1;
-
-        for(auto it: adjList[start]){
-            if(vis[it] == 1){
-                return true;
-            }
-            else if(totalVis[it] == 0 && dfs(it,adjList,vis,totalVis) == true){
-                return true;
-            }
-        }
-
-        vis[start] = 0;
-
-        return false;
-
-    }
-    
-    
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
         int n = numCourses;
         int m = prerequisites.size();
         vector<vector<int>> adjList(n);
         vector<int> vis(n,0);
-        vector<int> totalVis(n,0);
+        vector<int> indegree(n,0);
+        queue<int> qu;
         for(int i = 0; i < m; i++){
             int a = prerequisites[i][0];
-            int b = prerequisites[i][1];
+            int b = prerequisites[i][1]; 
+            indegree[b]++;
             adjList[a].push_back(b);
         }
-        for(int i = 0;  i < n; i++){
-            if(!totalVis[i]){
-                if(dfs(i,adjList,vis,totalVis) == true){
-                    return false;
+        for(int i = 0 ; i< n; i++){
+            if(indegree[i] == 0){
+                qu.push(i);
+            }
+        }
+
+        while(qu.size()){
+            int node = qu.front();
+            qu.pop();
+            for(auto neighbour: adjList[node]){
+                if(indegree[neighbour] >= 1){
+                    indegree[neighbour]--;
+                    if(indegree[neighbour] == 0){
+                        qu.push(neighbour);
+                    }
                 }
             }
         }
+
+        for(int i = 0 ; i< n; i++){
+            if(indegree[i] != 0){
+                return false;
+            }
+        }
+        
+
         return true;
     }
 };
