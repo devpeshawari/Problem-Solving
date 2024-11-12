@@ -1,49 +1,43 @@
 class Solution {
 public:
-    bool dfs(int node, int vis[], int pathvis[] , vector<vector<int>>& adjList){
-        vis[node] = 1;
-        pathvis[node] = 1;
-        for(auto it: adjList[node]){
-            if(!vis[it]){
-                if(dfs(it, vis , pathvis , adjList) == true){
-                    return true;
-                }
-            }
-            else if(pathvis[it] == 1){
+    bool dfs(int start, vector<vector<int>> &adjList, vector<int> &vis, vector<int> &totalVis){
+        vis[start] = 1;
+        totalVis[start] = 1;
+
+        for(auto it: adjList[start]){
+            if(vis[it] == 1){
                 return true;
             }
-            
-            
-            
+            else if(totalVis[it] == 0 && dfs(it,adjList,vis,totalVis) == true){
+                return true;
+            }
         }
-        pathvis[node] = 0;
+
+        vis[start] = 0;
+
         return false;
+
     }
     
     
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
         int n = numCourses;
-        vector<vector<int>> adj_list;
-        adj_list.resize(numCourses);
-        
-        for(int i = 0; i < prerequisites.size(); i++){
-            adj_list[prerequisites[i][1]].push_back(prerequisites[i][0]);
+        int m = prerequisites.size();
+        vector<vector<int>> adjList(n);
+        vector<int> vis(n,0);
+        vector<int> totalVis(n,0);
+        for(int i = 0; i < m; i++){
+            int a = prerequisites[i][0];
+            int b = prerequisites[i][1];
+            adjList[a].push_back(b);
         }
-        int vis[numCourses];
-        int pathvis[numCourses];
-        for(int i = 0; i < n; i++){
-            vis[i] = 0;
-            pathvis[i] = 0;
-        }
-        bool cond = false;
-        for(int i = 0; i < n; i++){
-            if(!vis[i]){
-                cond = dfs(i,vis,pathvis,adj_list);
-                if(cond == true){
-                    break;
+        for(int i = 0;  i < n; i++){
+            if(!totalVis[i]){
+                if(dfs(i,adjList,vis,totalVis) == true){
+                    return false;
                 }
-            }   
+            }
         }
-        return !cond;    
+        return true;
     }
 };
