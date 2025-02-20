@@ -1,36 +1,44 @@
 class Solution {
 public:
+    
+    // 1 3 2
+    // 1 2 3 1
+    // 1 2 3 5 6 4
+    bool checkNonIncreasing(vector<int> &nums){
+        int n = nums.size();
+        for(int i = 1; i < n; i++){
+            if(nums[i] > nums[i - 1]) return false;
+        }
+
+        return true;
+    }
+    
     void nextPermutation(vector<int>& nums) {
         int n = nums.size();
-        int p = -1;
-        int p2 = -1;
-        if(n == 1){
+        if(checkNonIncreasing(nums) || n == 1){
+            reverse(nums.begin(), nums.end()); 
             return;
         }
-        stack<int> st; 
-        for(int i = n - 1; i >= 0; i--){
-            if(!st.empty() && nums[i] < nums[st.top()]){
-                p = i;
+        int pivot1 = -1;
+        int pivot2 = -1;
+        stack<int> st;
+
+        st.push(n - 1);
+
+        for(int i = n - 2; i >= 0; i--){
+            if(nums[i] < nums[st.top()]){
+                pivot1 = i;
+                pivot2 = st.top();
                 while(!st.empty() && nums[i] < nums[st.top()]){
-                    p2 = st.top();
+                    pivot2 = st.top();
                     st.pop();
                 }
                 break;
             }
             st.push(i);
         }
-        while(st.size()){
-            cout << 1 << " ";
-            st.pop();
-        }
-        if(p != -1){
-        swap(nums[p], nums[p2]);
-        reverse(nums.begin() + p + 1, nums.end());
-        }
-
-
-        if(p == -1){
-            reverse(nums.begin(),nums.end());
-        }
-    }
+        cout << pivot1;
+        swap(nums[pivot1],nums[pivot2]);
+        reverse(nums.begin() + pivot1 + 1,nums.end());
+    }   
 };
