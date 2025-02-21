@@ -11,18 +11,19 @@
  */
 class Solution {
 public:
-    int help(TreeNode * node){
-        if(node == NULL){
-            return 0;
-        }
-        int left = 1 + help(node->left);
-        int right = 1 + help(node->right);
+    // root is null -> 0;
+    // if I have just 1 node height is 1;
+    // height of tree is equal to currNode + max(leftSubTree,rightSubTree)
 
-
-        return max(left,right);
-    }
+    
     
     int maxDepth(TreeNode* root) {
-        return help(root);
+        if(root == NULL){
+            return 0;
+        }
+        int leftSide = maxDepth(root->left);
+        int rightSide = maxDepth(root->right);
+
+        return 1 + max(leftSide,rightSide);    
     }
 };
