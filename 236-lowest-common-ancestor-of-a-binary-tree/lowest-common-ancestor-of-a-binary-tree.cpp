@@ -7,40 +7,27 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
-class Solution {
-public:
-    TreeNode* help(TreeNode* node, TreeNode* p, TreeNode* q) {
-        if(node == NULL){
-            return NULL;
-        }
-        TreeNode * left = help(node->left,p,q);
-        TreeNode * right = help(node->right,p,q);
-        if(left == p && right == q){
-            return node;
-        } 
-        if(node == p || node == q){
-            return node;
-        }    
-        if(left == q && right == p){
-            return node;
-        }
-        if(left != NULL && right == NULL){
-            return left;
-        }   
-        if(left == NULL && right != NULL){
-            return right;
-        }  
-        
-        
-        if(node->left == NULL && node->right ==NULL){
-            return NULL;
-        }
+
+    TreeNode * findLCA(TreeNode * node, TreeNode * p, TreeNode * q){
+        if(node == NULL) return NULL;
+        if(node == p) return p;
+        if(node == q) return q;
+        TreeNode * leftTree = findLCA(node->left,p,q);
+        TreeNode * rightTree = findLCA(node->right,p,q);
+        if((leftTree == p || rightTree == p) && (leftTree == q || rightTree == q)) return node;
+        if(leftTree != NULL ) return leftTree;
+        if(rightTree != NULL) return rightTree;
 
         return NULL;
-
     }
     
+    
+
+
+
+class Solution {
+public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        return help(root,p,q);
+        return findLCA(root,p,q);
     }
 };
