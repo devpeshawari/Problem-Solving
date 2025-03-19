@@ -1,11 +1,21 @@
 class Solution {
 public:
-    
-    // 1 3 2
-    // 1 2 3 1
-    // 1 2 3 5 6 4
-    bool checkNonIncreasing(vector<int> &nums){
+    /*
+      stack: [8, 7, 6, 5,]
+      p1 = 2;
+      p2 = 4;
+
+        curr el < st.top element
+
+      0 1 2 3 4 5 6 7 8
+      ________________
+      1 2 4 7 6 5 3 2 1 
+      1 2 4 1 2 3 5 6 7 
+          i
+    */
+    bool isDesc(vector<int> &nums){
         int n = nums.size();
+
         for(int i = 1; i < n; i++){
             if(nums[i] > nums[i - 1]) return false;
         }
@@ -15,30 +25,26 @@ public:
     
     void nextPermutation(vector<int>& nums) {
         int n = nums.size();
-        if(checkNonIncreasing(nums) || n == 1){
-            reverse(nums.begin(), nums.end()); 
+        int p1 = -1;
+        int p2 = -1;
+        if(isDesc(nums)){
+            sort(nums.begin(),nums.end());
             return;
         }
-        int pivot1 = -1;
-        int pivot2 = -1;
         stack<int> st;
 
-        st.push(n - 1);
-
-        for(int i = n - 2; i >= 0; i--){
-            if(nums[i] < nums[st.top()]){
-                pivot1 = i;
-                pivot2 = st.top();
-                while(!st.empty() && nums[i] < nums[st.top()]){
-                    pivot2 = st.top();
+        for(int i = n - 1; i >= 0; i--){
+            if(!st.empty() && nums[i] < nums[st.top()]){
+                p1 = i;
+                while(st.size() && nums[i] < nums[st.top()]){
+                    p2 = st.top();
                     st.pop();
                 }
                 break;
-            }
+            } 
             st.push(i);
         }
-        cout << pivot1;
-        swap(nums[pivot1],nums[pivot2]);
-        reverse(nums.begin() + pivot1 + 1,nums.end());
-    }   
+        swap(nums[p1],nums[p2]);
+        reverse(nums.begin() + p1 + 1, nums.end());
+    }
 };
